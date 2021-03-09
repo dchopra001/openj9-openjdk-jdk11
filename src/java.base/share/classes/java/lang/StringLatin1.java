@@ -720,9 +720,58 @@ final class StringLatin1 {
         Arrays.fill(val, index, end, (byte)0);
     }
 
+	private static java.util.concurrent.ConcurrentHashMap<Integer, Integer> tableOfLengths = new java.util.concurrent.ConcurrentHashMap<Integer, Integer>();
+	private static java.util.concurrent.ConcurrentHashMap<Integer, Integer> tableOfLengths2 = new java.util.concurrent.ConcurrentHashMap<Integer, Integer>();
+
+
+    static
+	{
+		Runtime.getRuntime().addShutdownHook(new Thread()
+		{
+			public void run()
+			{
+	           java.util.Set<Integer> keysTemp = tableOfLengths.keySet();
+	           Integer[] keys = keysTemp.toArray(new Integer[keysTemp.size()]);
+	           System.out.println("DCDCDCDC --> Printing tableOfLengths data (for byte->char conversions)");
+	           System.out.println("Length,Frequency");
+	           for (Integer i : keys)
+	           {
+	           int length = i.intValue();
+	           int frequency = tableOfLengths.get(i).intValue();
+	           System.out.println(length + "," + frequency);
+	           }
+	 
+	 
+	 
+	           java.util.Set<Integer> keysTemp2 = tableOfLengths2.keySet();
+	           Integer[] keys2 = keysTemp2.toArray(new Integer[keysTemp2.size()]);
+	           System.out.println("DCDCDCDC --> Printing tableOfLengths data (for byte->byte conversions)");
+	           System.out.println("Length,Frequency");
+	           for (Integer i : keys2)
+	           {
+	           int length = i.intValue();
+	           int frequency = tableOfLengths2.get(i).intValue();
+	           System.out.println(length + "," + frequency);
+	           }
+			}
+		});
+	}
+
+
     // inflatedCopy byte[] -> char[]
     @HotSpotIntrinsicCandidate
     public static void inflate(byte[] src, int srcOff, char[] dst, int dstOff, int len) {
+
+		if (tableOfLengths.containsKey(len))
+       {
+               tableOfLengths.put(len, tableOfLengths.get(len) + 1);
+       }
+       else
+       {
+               tableOfLengths.put(len, 1);
+       }
+
+
         for (int i = 0; i < len; i++) {
             dst[dstOff++] = (char)(src[srcOff++] & 0xff);
         }
@@ -731,6 +780,15 @@ final class StringLatin1 {
     // inflatedCopy byte[] -> byte[]
     @HotSpotIntrinsicCandidate
     public static void inflate(byte[] src, int srcOff, byte[] dst, int dstOff, int len) {
+		        if (tableOfLengths2.containsKey(len))
+		       {
+		               tableOfLengths2.put(len, tableOfLengths2.get(len) + 1);
+		       }
+		       else
+		       {
+		               tableOfLengths2.put(len, 1);
+		       }
+		
         StringUTF16.inflate(src, srcOff, dst, dstOff, len);
     }
 
