@@ -447,6 +447,7 @@ class StringCoding {
     }
 
     static byte[] encode(Charset cs, byte coder, byte[] val) {
+		/*
         if (cs == UTF_8) {
             return encodeUTF8(coder, val, true);
         }
@@ -456,6 +457,7 @@ class StringCoding {
         if (cs == US_ASCII) {
             return encodeASCII(coder, val);
         }
+		*/
         CharsetEncoder ce = cs.newEncoder();
         // fastpath for ascii compatible
         if (coder == LATIN1 && (((ce instanceof ArrayEncoder) &&
@@ -500,6 +502,7 @@ class StringCoding {
 
     static byte[] encode(byte coder, byte[] val) {
         Charset cs = Charset.defaultCharset();
+		/*
         if (cs == UTF_8) {
             return encodeUTF8(coder, val, true);
         }
@@ -509,6 +512,7 @@ class StringCoding {
         if (cs == US_ASCII) {
             return encodeASCII(coder, val);
         }
+		*/
         StringEncoder se = deref(encoder);
         if (se == null || !cs.name().equals(se.cs.name())) {
             se = new StringEncoder(cs, cs.name());
