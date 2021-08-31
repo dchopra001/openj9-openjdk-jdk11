@@ -424,7 +424,8 @@ class StringCoding {
             try {
                 Charset cs = lookupCharset(csn);
                 if (cs != null) {
-                    if (cs == UTF_8) {
+                    /*
+					if (cs == UTF_8) {
                         return encodeUTF8(coder, val, true);
                     }
                     if (cs == ISO_8859_1) {
@@ -433,6 +434,7 @@ class StringCoding {
                     if (cs == US_ASCII) {
                         return encodeASCII(coder, val);
                     }
+					*/
                     se = new StringEncoder(cs, csn);
                 }
             } catch (IllegalCharsetNameException x) {}
