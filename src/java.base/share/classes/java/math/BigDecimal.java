@@ -3903,12 +3903,16 @@ public class BigDecimal extends Number implements Comparable<BigDecimal> {
      */
     private String layoutChars(boolean sci) {
         if (scale == 0)                      // zero scale is trivial
+	{
+	   System.out.println("DCDCDCDC - Scale = 0, intCompact = " + intCompact);
             return (intCompact != INFLATED) ?
                 Long.toString(intCompact):
                 intVal.toString();
+	}
         if (scale == 2  &&
             intCompact >= 0 && intCompact < Integer.MAX_VALUE) {
             // currency fast path
+	    System.out.println("DCDCDCDC - scale = 2, intCompact = " + intCompact);
             int lowInt = (int)intCompact % 100;
             int highInt = (int)intCompact / 100;
             return (Integer.toString(highInt) + '.' +
